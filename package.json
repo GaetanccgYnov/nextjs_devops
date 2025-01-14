@@ -1,0 +1,58 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "prettier": "prettier --write --ignore-unknown .",
+    "prettier:check": "prettier --check --ignore-unknown .",
+    "start": "next start",
+    "test": "start-server-and-test dev http://localhost:3000 'playwright test --trace on'"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.1.4",
+    "@playwright/test": "^1.47.2",
+    "@tailwindcss/forms": "^0.5.7",
+    "@vercel/postgres": "^0.10.0",
+    "autoprefixer": "10.4.19",
+    "bcrypt": "^5.1.1",
+    "clsx": "^2.1.1",
+    "next": "15.0.0-canary.56",
+    "next-auth": "5.0.0-beta.19",
+    "postcss": "8.4.38",
+    "react": "19.0.0-rc-f38c22b244-20240704",
+    "react-dom": "19.0.0-rc-f38c22b244-20240704",
+    "tailwindcss": "3.4.4",
+    "typescript": "5.5.2",
+    "use-debounce": "^10.0.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "20.14.8",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.6.0",
+    "@typescript-eslint/parser": "^8.6.0",
+    "@vercel/style-guide": "^5.2.0",
+    "eslint": "^8.52.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-next": "^14.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.36.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-tailwindcss": "^3.17.4",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.4",
+    "start-server-and-test": "^2.0.8"
+  },
+  "engines": {
+    "node": ">=20.12.0"
+  }
+}
