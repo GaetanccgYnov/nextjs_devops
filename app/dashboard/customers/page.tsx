@@ -1,6 +1,5 @@
 import { fetchFilteredCustomers } from '@/app/lib/data';
 import CustomersTable from '@/app/ui/customers/table';
-import { CreateCustomerButton } from '@/app/ui/customers/buttons';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -20,8 +19,8 @@ export default async function Page({
   const customers = await fetchFilteredCustomers(query);
 
   return (
-      <main>
-        <CustomersTable customers={customers}/>
-      </main>
+    <main>
+      <CustomersTable customers={customers} />
+    </main>
   );
 }

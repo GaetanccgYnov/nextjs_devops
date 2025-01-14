@@ -21,12 +21,6 @@ const FormSchema = z.object({
   date: z.string(),
 });
 
-const CustomerSchema = z.object({
-  name: z.string().min(1, "Name is required."),
-  email: z.string().email("Invalid email address."),
-  image_url: z.string().url("Invalid URL."),
-});
-
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 const UpdateInvoice = FormSchema.omit({ date: true, id: true });
 
@@ -35,16 +29,6 @@ export type State = {
     customerId?: string[];
     amount?: string[];
     status?: string[];
-  };
-  message?: string | null;
-};
-
-export type CustomerState = {
-  errors?: {
-    id?: string[];
-    name?: string[];
-    email?: string[];
-    image_url?: string[];
   };
   message?: string | null;
 };
@@ -151,85 +135,5 @@ export async function authenticate(
       }
     }
     throw error;
-  }
-}
-
-import { promises as fs } from 'fs';
-import path from 'path';
-
-export async function createCustomer(
-    state: CustomerState,
-    formData: FormData
-): Promise<CustomerState> {
-  const customerData = {
-    name: formData.get('name') as string | null,
-    email: formData.get('email') as string | null,
-  };
-
-  const imageFile = formData.get('image') as File | null;
-
-  const validatedFields = CustomerSchema.omit({ image_url: true }).safeParse(customerData);
-
-  if (!validatedFields.success) {
-    return {
-      message: 'Failed to create customer. Please correct the errors and try again.',
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
-
-  const { name, email } = validatedFields.data;
-
-  let imageUrl = '';
-  if (imageFile) {
-    const imagePath = path.join(process.cwd(), 'public/customers', imageFile.name);
-    try {
-      await fs.writeFile(imagePath, Buffer.from(await imageFile.arrayBuffer()));
-      imageUrl = `/customers/${imageFile.name}`;
-    } catch (error) {
-      return {
-        message: 'File upload error: Unable to save profile image.',
-        errors: {},
-      };
-    }
-  }
-
-  try {
-    await sql`
-      INSERT INTO customers (name, email, image_url)
-      VALUES (${name}, ${email}, ${imageUrl})
-    `;
-    revalidatePath('/dashboard/customers');
-    return { message: 'Customer created successfully!', errors: {} };
-  } catch (error) {
-    return {
-      message: 'Database error: Unable to create customer.',
-      errors: {},
-    };
-  }
-}
-
-export async function deleteCustomer(id: string) {
-  try {
-    // Vérifier si des factures sont liées au client
-    const invoices = await sql`
-      SELECT COUNT(*) 
-      FROM invoices 
-      WHERE customer_id = ${id}
-    `;
-
-    // Si des factures sont trouvées, retournez un message d'erreur
-    if (Number(invoices.rows[0].count) > 0) {
-      return {
-        message: 'Operation impossible : ce client a des factures associées.',
-      };
-    }
-
-    // Supprimer le client si aucune facture n'est liée
-    await sql`DELETE FROM customers WHERE id = ${id}`;
-    revalidatePath('/dashboard/customers');
-    return { message: 'Client supprimé avec succès' };
-  } catch (error) {
-    console.error('Database Error:', error);
-    return { message: 'Erreur de la base de données : Impossible de supprimer le client.' };
   }
 }
